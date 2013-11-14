@@ -12,7 +12,23 @@
 
 		<!-- Main content -->
 		<div class="span9">
-			Logowanie udane - jesteś w widoku home
+			<?php 
+				if(isset($_GET['logSuccess'])) {
+			?>
+				<div class="row">
+				<div class="alert alert-success">
+					 <button type="button" class="close" data-dismiss="alert">&times;</button>
+					<h4>Logowanie udane!</h4>
+				</div>
+				</div>
+			<?php
+				}
+			?>
+			<div class="row">
+				<div class="hero-unit">
+					<h1>Witaj nieznajomy!</h1>
+				</div>
+			</div>
 		</div>
 		<!-- end of Main content -->
 

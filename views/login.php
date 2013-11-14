@@ -2,7 +2,7 @@
 	@$user = $_POST['user'];
 	@$pass = $_POST['pass'];
 
-	if(!isset($_POST['user']) && !isset($_POST['pass'])) {
+	if(!isset($_POST['user'])  && !isset($_POST['pass'])) {
 
 		require_once('layout/header.html'); // Head html section
 ?>
@@ -13,6 +13,24 @@
 				<br />
 					<form class="form-horizontal" method="post" action="login.php">
 						<legend>Zaloguj się</legend>
+						<?php
+							if (isset($_GET['error'])) { 
+						?>
+						<div class="alert alert-error">
+   							<button type="button" class="close" data-dismiss="alert">&times;</button>
+   							<strong>Błąd logowania!</strong> Wprowadzono nieprawidłowy login lub hasło
+    					</div>
+    					<?php 
+    						}
+    						elseif (isset($_GET['empty'])) { 
+						?>
+						<div class="alert">
+   							<button type="button" class="close" data-dismiss="alert">&times;</button>
+   							<strong>Błąd danych!</strong> Login i hasło nie mogą być puste
+    					</div>
+    					<?php 
+    						}
+    					?>
 						<div class="control-group">
 							<label class="control-label" for="inputEmail">Login:</label>
 							<div class="controls">
@@ -45,11 +63,18 @@
 		$stmt = $db->prepare('SELECT * FROM users WHERE login = :login AND password = :pass');
 		$stmt->bindValue(':login', $user, PDO::PARAM_STR);
 		$stmt->bindValue(':pass', $pass, PDO::PARAM_STR);
-		$results = $stmt->execute();
-
-		// TODO: Sessions params, hash passwords
-		if($results == '1') {
-			header('Location: home.php');
+		$stmt->execute();
+		$results = $stmt->fetchAll();
+		// TODO: Sessions params, hash passwords, elseif logout
+		
+		if(sizeof($results) === 1) {
+			header('Location: home.php?logSuccess');
+		}
+		elseif(empty($user) || empty($pass)) {
+			header('Location: login.php?empty');
+		}
+		else {
+			header('Location: login.php?error');
 		}
 
 	}
