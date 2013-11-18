@@ -1,6 +1,11 @@
 <?php
+	session_start();
+	if($_SESSION['logged'] == 1) {
+
 	require_once('layout/header.html');  // Head html section 
 	require_once('layout/top.html'); 	// Bar on the top of site
+	$user = $_SESSION['user'];
+	
 ?>
 
 <div class="container-fluid">
@@ -26,7 +31,7 @@
 			?>
 			<div class="row">
 				<div class="hero-unit">
-					<h1>Witaj nieznajomy!</h1>
+					<h1>Witaj <?=$user?></h1>
 				</div>
 			</div>
 		</div>
@@ -37,4 +42,8 @@
 
 <?php
 	require_once('layout/footer.html'); // End of html code
+	}
+	else {
+		header('Location: login.php');
+	}
 ?>
